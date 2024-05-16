@@ -21,7 +21,7 @@ Step 1: Clone the repository and build binaries
 rm -rf build``
 
 # Step 2: Run oracle
-Create systemd service
+# Create systemd service
 
 sudo tee /etc/systemd/system/slinky.service > /dev/null <<EOF
 
