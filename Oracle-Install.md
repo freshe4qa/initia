@@ -3,11 +3,15 @@
 Step 1: Clone the repository and build binaries
 
 # Clone repository
-``cd $HOME
-rm -rf slinky
-git clone https://github.com/skip-mev/slinky.git
-cd slinky
-git checkout v0.4.3``
+``cd $HOME``
+
+``rm -rf slinky``
+
+``git clone https://github.com/skip-mev/slinky.git``
+
+``cd slinky``
+
+``git checkout v0.4.3``
 
 # Build binaries
 ``make install``
