@@ -69,15 +69,15 @@ git checkout v0.2.14
 make install
 
 # config
-#initiad config chain-id $INITIA_CHAIN_ID
-#initiad config keyring-backend test
+initiad config set client chain-id initiation-1
+initiad config set client keyring-backend test
 
 # init
 initiad init $NODENAME --chain-id $INITIA_CHAIN_ID
 
 # download genesis and addrbook
-curl -Ls https://snapshots.kjnodes.com/initia-testnet/genesis.json > $HOME/.initia/config/genesis.json
-curl -Ls https://snapshots.kjnodes.com/initia-testnet/addrbook.json > $HOME/.initia/config/addrbook.json
+curl -L https://snapshots-testnet.nodejumper.io/initia-testnet/genesis.json > $HOME/.initia/config/genesis.json
+curl -L https://snapshots-testnet.nodejumper.io/initia-testnet/addrbook.json > $HOME/.initia/config/addrbook.json
 
 # set minimum gas price
 sed -i -e "s|^minimum-gas-prices *=.*|minimum-gas-prices = \"0.15uinit,0.01uusdc\"|" $HOME/.initia/config/app.toml
@@ -122,7 +122,7 @@ EOF
 
 # reset
 initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
-curl -L https://snapshots.kzvn.xyz/initia/initiation-1_latest.tar.lz4 | tar -Ilz4 -xf - -C $HOME/.initia
+curl https://snapshots-testnet.nodejumper.io/initia-testnet/initia-testnet_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.initia
 
 # start service
 sudo systemctl daemon-reload
