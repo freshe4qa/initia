@@ -63,7 +63,7 @@ fi
 
 # download binary
 cd $HOME && rm -rf initia
-git clone https://github.com/initia-labs/initia.git
+git clone https://github.com/initia-labs/initia
 cd initia
 git checkout v0.2.15
 make install
@@ -73,7 +73,7 @@ initiad config set client chain-id initiation-1
 initiad config set client keyring-backend test
 
 # init
-initiad init $NODENAME --chain-id $INITIA_CHAIN_ID
+initiad init $NODENAME --chain-id initiation-1
 
 # download genesis and addrbook
 curl -L https://snapshots-testnet.nodejumper.io/initia-testnet/genesis.json > $HOME/.initia/config/genesis.json
@@ -102,30 +102,19 @@ sed -i -e "s/^pruning-keep-every *=.*/pruning-keep-every = \"$pruning_keep_every
 sed -i -e "s/^pruning-interval *=.*/pruning-interval = \"$pruning_interval\"/" $HOME/.initia/config/app.toml
 sed -i "s/snapshot-interval *=.*/snapshot-interval = 0/g" $HOME/.initia/config/app.toml
 
-#update
-sed -i -e "s/^timeout_commit *=.*/timeout_commit = \"1s\"/" $HOME/.initia/config/config.toml
-sed -i -e "s/^timeout_propose *=.*/timeout_propose = \"3s\"/" $HOME/.initia/config/config.toml
-sed -i -e "s/^timeout_propose_delta *=.*/timeout_propose_delta = \"500ms\"/" $HOME/.initia/config/config.toml
-sed -i -e "s/^timeout_prevote *=.*/timeout_prevote = \"1s\"/" $HOME/.initia/config/config.toml
-sed -i -e "s/^timeout_prevote_delta *=.*/timeout_prevote_delta = \"500ms\"/" $HOME/.initia/config/config.toml
-sed -i -e "s/^timeout_precommit *=.*/timeout_precommit = \"1s\"/" $HOME/.initia/config/config.toml
-sed -i -e "s/^timeout_precommit_delta *=.*/timeout_precommit_delta = \"500ms\"/" $HOME/.initia/config/config.toml
-
-sed -i -e "s|^client_timeout *=.*|client_timeout = \"1s\"|" $HOME/.initia/config/app.toml
-
 # enable prometheus
 sed -i -e "s/prometheus = false/prometheus = true/" $HOME/.initia/config/config.toml
 
 # create service
-sudo tee /etc/systemd/system/initiad.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/initiad.service > /dev/null << EOF
 [Unit]
-Description=initiad Daemon
+Description=Initia node service
 After=network-online.target
 [Service]
 User=$USER
 ExecStart=$(which initiad) start
-Restart=always
-RestartSec=3
+Restart=on-failure
+RestartSec=10
 LimitNOFILE=65535
 [Install]
 WantedBy=multi-user.target
